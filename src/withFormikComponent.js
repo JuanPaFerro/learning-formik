@@ -1,11 +1,15 @@
-import { Formik, Form, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import Checkbox from "./components/Checkbox";
 import TextInput from "./components/TextInput";
-import Select from "./components/Select";
-import Radio from "./components/Radio";
 
 const validate = (values) => {
   const errors = {};
+
+  if (!values.nickname) {
+    errors.nickname = "Required!";
+  } else if (values.nickname.length < 5) {
+    errors.nickname = "Nickname is too short!";
+  }
 
   if (!values.name) {
     errors.name = "Required!";
@@ -19,10 +23,6 @@ const validate = (values) => {
     errors.lastname = "Lastname is too short!";
   }
 
-  if (!values.radio) {
-    errors.radio = "Requerido!"
-  }
-
   return errors;
 };
 
@@ -33,29 +33,26 @@ function App() {
         name: "",
         lastname: "",
         email: "",
-        level: "",
-        radio: "",
+        nickname: "",
+        accept: true,
       }}
       validate={validate}
       onSubmit={(values) => console.log(values)}
     >
       <Form>
-        <TextInput name="name" label="name" />
+        <TextInput name="nickname" label="NickName" />
+        <label>Name</label>
+        <Field name="name" type="text" />
+        <ErrorMessage name="name" />
         <br />
-        <TextInput name="lastname" label="Lastname" />
+        <label>LastName</label>
+        <Field name="lastname" type="text" />
+        <ErrorMessage name="lastname" />
         <br />
-        <TextInput name="email" label="Email" />
-        <Select label="Level" name="level">
-          <option value="">Select your level</option>
-          <option value="1">Level 1</option>
-          <option value="2">Level 2</option>
-          <option value="3">Level 3</option>
-        </Select>
+        <label>Email</label>
+        <Field name="email" type="email" />
+        <ErrorMessage name="email" />
         <Checkbox name="accept">Accept therms and conditions</Checkbox>
-        <Radio name="radio" value="opt1" label="option 1" />
-        <Radio name="radio" value="opt2" label="option 2" />
-        <Radio name="radio" value="opt3" label="option 3" />
-        <ErrorMessage name="radio" />
         <button type="submit">Send</button>
       </Form>
     </Formik>
